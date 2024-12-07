@@ -94,7 +94,7 @@ Este código implementa un sistema de RAG (Retrieval-Augmented Generation), a ba
     
     rag_chain = prompt | llm | StrOutputParser()
 
-#Se define una clase que integra el recuperador de documentos y la cadena RAG.
+#Se define una clase con funciones que integra el recuperador de documentos y la cadena RAG.
 
     class RAGApplication:
         def __init__(self, retriever, rag_chain):
