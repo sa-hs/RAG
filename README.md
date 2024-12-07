@@ -6,11 +6,11 @@ Este código implementa un sistema de RAG (Retrieval-Augmented Generation), a ba
 from google.colab import drive
 drive.mount('/content/drive')
 
-import subprocess
+´´´import subprocess
 
 #Configurar el entorno e instalar paquetes
 
-try:
+´´´try:
     subprocess.run(['pip', 'install', 'langchain', 'langchain_community', 'langchain-openai',
                     'scikit-learn', 'langchain-ollama', 'pymupdf', 'langchain_huggingface',
                     'faiss-gpu'], check=True)
@@ -20,59 +20,59 @@ except subprocess.CalledProcessError as e:
 
 #Cargar y preparar documentos
 
-from langchain.document_loaders import PyMuPDFLoader
+´´´from langchain.document_loaders import PyMuPDFLoader
 
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+´´´from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 #Ruta al archivo PDF en Google Drive
 
-file_path = '/content/drive/MyDrive/Colab Notebooks/CIDE/Introducción a la Estadística.pdf'
+´´´file_path = '/content/drive/MyDrive/Colab Notebooks/CIDE/Introducción a la Estadística.pdf'
 
 #Cargar el documento desde el archivo PDF
 
-loader = PyMuPDFLoader(file_path)
+´´´loader = PyMuPDFLoader(file_path)
 
-docs = loader.load()
+´´´docs = loader.load()
 
 #Se divide el contenido del documento en trozos manejables usando un divisor recursivo.
 
-text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(chunk_size=2000, chunk_overlap=200)
-doc_splits = text_splitter.split_documents(docs)
+´´´text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(chunk_size=2000, chunk_overlap=200)
+´´´doc_splits = text_splitter.split_documents(docs)
 
 #Configuración del Modelo Ollama. !ollama instala y prepara el modelo localmente.
 
-!curl -fsSL https://ollama.com/install.sh | sh
+´´´!curl -fsSL https://ollama.com/install.sh | sh
 
-!pip install colab-xterm
+v!pip install colab-xterm
 
-%load_ext colabxterm
+´´´%load_ext colabxterm
 
-%xterm
+´´´%xterm
 
-#ollama serve
+´´´#ollama serve
 
-!ollama pull llama3
+´´´!ollama pull llama3
 
 #Se utiliza FAISS para crear un almacén vectorial a partir de los fragmentos.
 
-from langchain_huggingface import HuggingFaceEmbeddings
+´´´from langchain_huggingface import HuggingFaceEmbeddings
 
 #Crear almacen vectorial
 
-from langchain_community.vectorstores import FAISS
+´´´from langchain_community.vectorstores import FAISS
 
-vectorstore = FAISS.from_documents(
+´´´vectorstore = FAISS.from_documents(
      documents=doc_splits,
      embedding=HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
      #embedding=HuggingFaceEmbeddings()
  )
  
-retriever = vectorstore.as_retriever(k=4)
+vretriever = vectorstore.as_retriever(k=4)
 
 
 #Configurar la plantilla LLM y prompt. Se define un modelo de lenguaje y un prompt para guiar la generación de respuestas.
 
-from langchain_ollama import ChatOllama
+´´´from langchain_ollama import ChatOllama
 
 from langchain.prompts import PromptTemplate
 
@@ -92,11 +92,11 @@ Respuesta:
 
 llm = ChatOllama(model="llama3", temperature=0)
 
-rag_chain = prompt | llm | StrOutputParser()
+rag_chain = prompt | llm | StrOutputParser()´´´
 
 #Se define una clase que integra el recuperador de documentos y la cadena RAG.
 
-class RAGApplication:
+´´´class RAGApplication:
     def __init__(self, retriever, rag_chain):
         self.retriever = retriever
         self.rag_chain = rag_chain
@@ -109,10 +109,10 @@ class RAGApplication:
 
 #Se inicializa la aplicación y se formula una consulta.
 
-rag_application = RAGApplication(retriever, rag_chain)
+´´´rag_application = RAGApplication(retriever, rag_chain)
 
 question = "que es un estadistico??"
 answer = rag_application.run(question)
 print("Question:", question)
 print("Answer:", answer)
-        return answer
+        return answer´´´
